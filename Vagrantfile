@@ -18,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = 'http://bit.ly/vagrant-lxc-saucy64-2013-10-23'
+  config.vm.box_url = 'http://bit.ly/vagrant-lxc-precise64-2013-10-23'
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
