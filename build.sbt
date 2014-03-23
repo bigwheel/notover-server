@@ -1,4 +1,4 @@
-name := "noctover-server"
+name := "notover-server"
 
 version := "1.0-SNAPSHOT"
 
