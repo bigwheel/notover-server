@@ -7,6 +7,27 @@
     },
     "java": {
       "locked_version": "1.22.0"
+    },
+    "mongodb": {
+      "locked_version": "0.13.7"
+    },
+    "apt": {
+      "locked_version": "2.3.8"
+    },
+    "python": {
+      "locked_version": "1.4.6"
+    },
+    "build-essential": {
+      "locked_version": "2.0.0"
+    },
+    "yum-epel": {
+      "locked_version": "0.3.4"
+    },
+    "yum": {
+      "locked_version": "3.1.4"
+    },
+    "runit": {
+      "locked_version": "1.5.10"
     }
   }
 }

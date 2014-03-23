@@ -89,13 +89,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # chef.data_bags_path = "../my-recipes/data_bags"
     chef.add_recipe 'play2'
     chef.add_recipe 'java'
-    # chef.add_role "web"
+    chef.add_recipe 'mongodb::10gen_repo'
+    chef.add_recipe 'mongodb::default'
 
     # You may also specify custom JSON attributes:
     chef.json = {
       play2: {
         version: '2.2.2',
         checksum: 'e3e7f2c59c51c13c475158bfeca29e94'
+      },
+      mongodb: {
+        config: {
+          rest: true,
+          smallfiles: true
+        }
       }
     }
   end
