@@ -88,7 +88,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # chef.roles_path = "../my-recipes/roles"
     # chef.data_bags_path = "../my-recipes/data_bags"
     chef.add_recipe 'play2'
+    # javaインストール前にapt-get updateしないと行けないので追加
+    # https://tickets.opscode.com/browse/COOK-3355
+    chef.add_recipe 'apt::default'
     chef.add_recipe 'java'
+    # ubuntuへmongodbをインストールするときには必要
+    # https://github.com/edelight/chef-mongodb#10gen
     chef.add_recipe 'mongodb::10gen_repo'
     chef.add_recipe 'mongodb::default'
 
