@@ -1,0 +1,12 @@
+{
+  "sources": {
+    "play2": {
+      "locked_version": "0.1.0",
+      "git": "git://github.com/njin-fr/play2.git",
+      "ref": "79f247cd1c5858db139c2cdd26fe21c076f518f1"
+    },
+    "java": {
+      "locked_version": "1.22.0"
+    }
+  }
+}
