@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = 'http://bit.ly/vagrant-lxc-precise64-2013-10-23'
+  config.vm.box_url = 'http://bit.ly/vagrant-lxc-raring64-2013-10-23'
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -29,7 +29,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network :private_network, ip: '10.0.3.89'
+  config.vm.network :private_network, ip: '10.0.3.101'
+  # この設定は実際にはvagrant-lxcでは反映されておらず、下のプロバイダーセクションの
+  # 重複する記述のほうが反映されてる
+  # じゃあなぜこれを書いているかというとvagrant-hostsupdaterが参照する値がこちらだから
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -46,18 +49,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
 
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
-  # config.vm.provider :virtualbox do |vb|
-  #   # Don't boot with headless mode
-  #   vb.gui = true
-  #
-  #   # Use VBoxManage to customize the VM. For example to change memory:
-  #   vb.customize ["modifyvm", :id, "--memory", "1024"]
-  # end
-  #
+  config.vm.provider :lxc do |lxc|
+    lxc.customize 'network.ipv4', '10.0.3.101'
+  end
+
   # View the documentation for the provider you're using for more
   # information on available options.
 
