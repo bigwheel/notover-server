@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/notover-server -Dhttp.port=${PORT} ${JAVA_OPTS} -Dconfig.resource=prod.conf
+web: target/universal/stage/bin/notover-server -Dhttp.port=${PORT} -Dconfig.resource=prod.conf
