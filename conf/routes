@@ -10,4 +10,5 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 GET     /_create_mongodb_index      controllers.Application.createMongodbIndex
 
-GET     /:url                       controllers.Application.notes(url: String)
+GET     /note/:url                  controllers.Application.getNote(url: String)
+POST    /note/:url                  controllers.Application.postNote(url: String)
