@@ -5,6 +5,7 @@ import play.api.libs.json.{JsObject, Json}
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import reactivemongo.api.indexes.{IndexType, Index}
 
 object Application extends Controller with MongoController {
 
@@ -13,6 +14,13 @@ object Application extends Controller with MongoController {
   }
 
   def notesCollection = db.collection[JSONCollection]("notes")
+
+  def createMongodbIndex = Action.async {
+    notesCollection.indexesManager.ensure(Index(List("url" -> IndexType.Ascending))).map {
+      status =>
+        Ok(status.toString)
+    }
+  }
 
   def notes(url: String) = Action.async {
     val futureNotesList =
