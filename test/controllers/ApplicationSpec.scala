@@ -6,6 +6,9 @@ import org.junit.runner._
 
 import play.api.test._
 import play.api.test.Helpers._
+import play.api.mvc.{AnyContent, Action, Controller}
+import play.modules.reactivemongo.MongoController
+
 
 /**
  * Add your spec here.
@@ -27,6 +30,15 @@ class ApplicationSpec extends Specification {
       status(home) must equalTo(OK)
       contentType(home) must beSome.which(_ == "text/html")
       contentAsString(home) must contain ("Your new application is ready.")
+    }
+
+    "postNote" can {
+      val controller = new ApplicationController with Controller with MongoController
+      val target = controller.getNote _
+
+      "cannot accept file path" in {
+        status(target("file://test.txt")(FakeRequest())) === OK
+      }
     }
   }
 }
