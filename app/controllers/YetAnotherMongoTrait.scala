@@ -8,7 +8,7 @@ import reactivemongo.api.{DB, MongoConnection, MongoDriver}
  * 必要十分な機能を持った代わりのトレイトをここに定義した
  */
 trait YetAnotherMongoTrait {
-  def driver: MongoDriver
-  def connection: MongoConnection
-  def db: DB
+  protected[this] def driver: MongoDriver
+  protected[this] def connection: MongoConnection
+  protected[this] def db: DB
 }

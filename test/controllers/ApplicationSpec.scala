@@ -6,7 +6,7 @@ import org.junit.runner._
 
 import play.api.test._
 import play.api.test.Helpers._
-import play.api.mvc.{AnyContent, Action, Controller}
+import play.api.mvc.Controller
 import play.modules.reactivemongo.MongoController
 
 
