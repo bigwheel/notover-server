@@ -9,7 +9,8 @@ import reactivemongo.api.indexes.{IndexType, Index}
 import scala.concurrent.Future
 import reactivemongo.core.commands.LastError
 
-object Application extends Controller with MongoController {
+trait ApplicationController {
+  self: Controller with MongoController =>
 
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
@@ -42,5 +43,7 @@ object Application extends Controller with MongoController {
         BadRequest
     }
   }
+}
 
+object Application extends ApplicationController with Controller with MongoController {
 }
