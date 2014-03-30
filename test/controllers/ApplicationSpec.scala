@@ -7,8 +7,6 @@ import org.junit.runner._
 import play.api.test._
 import play.api.test.Helpers._
 import play.api.mvc.Controller
-import play.modules.reactivemongo.MongoController
-
 
 /**
  * Add your spec here.
@@ -34,7 +32,7 @@ class ApplicationSpec extends Specification {
 
     "postNote" can {
       val controller = new ApplicationController with Controller with MongoTraitForTest {
-        protected[this] implicit val executionContext = scala.concurrent.ExecutionContext.Implicits.global
+        protected[this] val executionContext = scala.concurrent.ExecutionContext.global
       }
       val target = controller.getNote _
 
