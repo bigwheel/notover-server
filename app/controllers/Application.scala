@@ -9,8 +9,8 @@ import reactivemongo.api.indexes.{IndexType, Index}
 import scala.concurrent.Future
 import reactivemongo.core.commands.LastError
 
-trait ApplicationController {
-  self: Controller with MongoController =>
+trait ApplicationController extends YetAnotherMongoTrait {
+  self: Controller =>
 
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
