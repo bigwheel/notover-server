@@ -4,7 +4,6 @@ import play.api.mvc._
 import play.api.libs.json.{JsArray, JsObject, Json}
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import reactivemongo.api.indexes.{IndexType, Index}
 import scala.concurrent.Future
 import reactivemongo.core.commands.LastError
@@ -46,4 +45,5 @@ trait ApplicationController extends YetAnotherMongoTrait {
 }
 
 object Application extends ApplicationController with Controller with MongoController {
+  protected[this] implicit val executionContext = play.api.libs.concurrent.Execution.Implicits.defaultContext
 }

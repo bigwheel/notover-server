@@ -33,7 +33,9 @@ class ApplicationSpec extends Specification {
     }
 
     "postNote" can {
-      val controller = new ApplicationController with Controller with MongoController
+      val controller = new ApplicationController with Controller with MongoTraitForTest {
+        protected[this] implicit val executionContext = scala.concurrent.ExecutionContext.Implicits.global
+      }
       val target = controller.getNote _
 
       "cannot accept file path" in {
