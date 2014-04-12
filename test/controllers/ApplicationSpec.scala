@@ -19,8 +19,20 @@ class ApplicationSpec extends Specification {
       }
       val target = controller.getNote _
 
-      "cannot accept file path" in {
-        status(target("file://test.txt")(FakeRequest())) === OK
+      "accepts http url" in {
+        status(target("http://www.google.com/")(FakeRequest())) === OK
+      }
+
+      "accepts https url" in {
+        status(target("https://www.google.com/")(FakeRequest())) === OK
+      }
+
+      "does'nt accept ftp url" in {
+        status(target("ftp://www.google.com/")(FakeRequest())) === BAD_REQUEST
+      }
+
+      "does'nt accept file url" in {
+        status(target("file://www.google.com/")(FakeRequest())) === BAD_REQUEST
       }
     }
   }
