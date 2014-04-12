@@ -1,10 +1,10 @@
 package controllers
 
 import play.api.mvc._
-import play.api.libs.json.{JsArray, JsObject, Json}
+import play.api.libs.json.{ JsArray, JsObject, Json }
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
-import reactivemongo.api.indexes.{IndexType, Index}
+import reactivemongo.api.indexes.{ IndexType, Index }
 import scala.concurrent.Future
 import reactivemongo.core.commands.LastError
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -29,7 +29,7 @@ trait ApplicationController extends YetAnotherMongoTrait {
     val futureNotesList =
       notesCollection.find(Json.obj("url" -> url)).cursor[JsObject].collect[List]()
 
-    val futureJson = futureNotesList.map (noteList => JsArray(noteList))
+    val futureJson = futureNotesList.map(noteList => JsArray(noteList))
     futureJson.map(Ok(_))
   }
 

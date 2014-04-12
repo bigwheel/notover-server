@@ -1,6 +1,6 @@
 package controllers
 
-import reactivemongo.api.{MongoConnection, MongoDriver}
+import reactivemongo.api.{ MongoConnection, MongoDriver }
 import scala.concurrent.ExecutionContext
 
 trait MongoTraitForTest extends YetAnotherMongoTrait {
