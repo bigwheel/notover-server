@@ -7,3 +7,5 @@ libraryDependencies ++= Seq(
 )     
 
 play.Project.playScalaSettings
+
+scalariformSettings
