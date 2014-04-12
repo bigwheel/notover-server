@@ -44,4 +44,5 @@ trait ApplicationController extends YetAnotherMongoTrait {
     }
   }
 }
+
 object Application extends ApplicationController with Controller with MongoController
