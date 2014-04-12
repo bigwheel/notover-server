@@ -8,6 +8,7 @@ import reactivemongo.api.indexes.{ IndexType, Index }
 import scala.concurrent.Future
 import reactivemongo.core.commands.LastError
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import org.apache.commons.validator.routines.UrlValidator
 
 trait ApplicationController extends YetAnotherMongoTrait {
   self: Controller =>
@@ -34,14 +35,18 @@ trait ApplicationController extends YetAnotherMongoTrait {
   }
 
   def postNote(url: String) = Action.async(parse.json) { request =>
-    val futureLastError: Future[LastError] = notesCollection.save(request.body.as[JsObject] ++ Json.obj("url" -> url))
+    if (new UrlValidator(Array("http", "https")).isValid(url)) {
+      val futureLastError: Future[LastError] = notesCollection.save(request.body.as[JsObject] ++ Json.obj("url" -> url))
 
-    futureLastError.map { lastError =>
-      if (lastError.ok)
-        Ok
-      else
-        BadRequest
-    }
+      futureLastError.map {
+        lastError =>
+          if (lastError.ok)
+            Ok
+          else
+            BadRequest
+      }
+    } else
+      Future.successful(BadRequest)
   }
 }
 
