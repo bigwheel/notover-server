@@ -13,7 +13,7 @@ class ApplicationSpec extends Specification {
 
   "Application" should {
 
-    "postNote" can {
+    "postNote" >> {
       val controller = new ApplicationController with Controller with MongoTraitForTest {
         protected[this] val executionContext = scala.concurrent.ExecutionContext.global
       }
