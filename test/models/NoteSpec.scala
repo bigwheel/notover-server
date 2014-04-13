@@ -11,8 +11,9 @@ class NoteSpec extends Specification {
 
   "Note" should {
     "successes correct json" in {
-      Json.obj("selector" -> "a", "text" -> "b").validate[Note] must beLike {
-        case JsSuccess(Note("a", "b"), _) => ok
+      val sampleJson = Json.obj("sections" -> Seq(Json.obj("selector" -> "a", "text" -> "b")))
+      sampleJson.validate[Note] must beLike {
+        case JsSuccess(Note(List(Section("a", "b"))), _) => ok
       }
     }
 

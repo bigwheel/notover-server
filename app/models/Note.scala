@@ -3,11 +3,16 @@ package models
 import play.api.libs.json.OFormat
 import play.jsonext.CaseClassFormats
 
-final case class Note(selector: String, text: String)
+final case class Note(sections: List[Section])
 
 object Note {
-  implicit val fooOFormat: OFormat[Note] =
-    CaseClassFormats(apply _, unapply _)(
-      "selector", "text"
-    )
+  implicit val NoteOFormat: OFormat[Note] =
+    CaseClassFormats(apply _, unapply _)("sections")
+}
+
+final case class Section(selector: String, text: String)
+
+object Section {
+  implicit val SectionOFormat: OFormat[Section] =
+    CaseClassFormats(apply _, unapply _)("selector", "text")
 }
