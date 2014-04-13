@@ -44,14 +44,14 @@ trait ApplicationController extends YetAnotherMongoTrait {
 
   def postNote(url: String) = Action.async(parse.json) { request =>
     urlValidation(url) {
-      val futureLastError: Future[LastError] = notesCollection.save(request.body.as[JsObject] ++ Json.obj("url" -> url))
+      val futureLastError: Future[LastError] =
+        notesCollection.save(request.body.as[JsObject] ++ Json.obj("url" -> url))
 
-      futureLastError.map {
-        lastError =>
-          if (lastError.ok)
-            Ok
-          else
-            BadRequest
+      futureLastError.map { lastError =>
+        if (lastError.ok)
+          Ok
+        else
+          InternalServerError
       }
     }
   }
