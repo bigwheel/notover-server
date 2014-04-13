@@ -45,11 +45,10 @@ class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
           OK ! "https://www.google.com/" |
           BAD_REQUEST ! "ftp://www.google.com/" |
           BAD_REQUEST ! "file://www.google.com/" |> { (status_code, sample_url) =>
-          val req: FakeRequest[JsValue] = new FakeRequest(POST,
-            controllers.routes.Application.postNote("").url, FakeHeaders(),
-            Json.obj() // ↑ なぜか URL 取得するのにダミーの引数渡さないといけないださい仕様だが play ゆえ致し方なし
-          )
-          status(target(sample_url)(req)) === status_code
+          val req = new FakeRequest(POST, controllers.routes.Application.postNote("").url,
+            FakeHeaders(), Json.obj())
+          // ↑ なぜか URL 取得するのにダミーの引数渡さないといけないださい仕様だが play ゆえ致し方なし
+          status(target(sample_url)(req)) must_== status_code
         }
       }
     }
