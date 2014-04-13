@@ -3,7 +3,7 @@ package models
 import play.api.libs.json.OFormat
 import play.jsonext.CaseClassFormats
 
-final case class Note(sections: List[Section])
+final case class Note(sections: Set[Section])
 
 object Note {
   implicit val NoteOFormat: OFormat[Note] =
