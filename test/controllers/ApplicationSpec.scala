@@ -51,6 +51,18 @@ class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
           status(target(sampleUrl)(req)) must_== statusCode
         }
       }
+
+      "accepts empty json" in {
+        val req = new FakeRequest(POST, controllers.routes.Application.postNote("").url,
+          FakeHeaders(), Json.obj())
+        status(target("http://www.google.com/")(req)) must_== OK
+      }
+
+      "doesn't accept incorrect format json" in {
+        val req = new FakeRequest(POST, controllers.routes.Application.postNote("").url,
+          FakeHeaders(), Json.obj("bad" -> "json"))
+        status(target("http://www.google.com/")(req)) must_== BAD_REQUEST
+      }
     }
   }
 }
