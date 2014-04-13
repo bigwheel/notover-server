@@ -38,6 +38,9 @@ class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
 
     "postNote" >> {
       val target = controller.postNote _
+      def fakeRequest(requestBody: JsObject) =
+        new FakeRequest(POST, controllers.routes.Application.postNote("").url,
+          FakeHeaders(), requestBody)
 
       "accepts only http and https protocols" in {
         "status code" | "sample url" |
@@ -45,23 +48,17 @@ class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
           OK ! "https://www.google.com/" |
           BAD_REQUEST ! "ftp://www.google.com/" |
           BAD_REQUEST ! "file://www.google.com/" |> { (statusCode, sampleUrl) =>
-            val req = new FakeRequest(POST, controllers.routes.Application.postNote("").url,
-              FakeHeaders(), Json.obj("sections" -> Seq[JsObject]()))
             // ↑ なぜか URL 取得するのにダミーの引数渡さないといけないださい仕様だが play ゆえ致し方なし
-            status(target(sampleUrl)(req)) must_== statusCode
+            status(target(sampleUrl)(fakeRequest(Json.obj("sections" -> Seq[JsObject]())))) must_== statusCode
           }
       }
 
       "accepts empty json" in {
-        val req = new FakeRequest(POST, controllers.routes.Application.postNote("").url,
-          FakeHeaders(), Json.obj("sections" -> Seq[JsObject]()))
-        status(target("http://www.google.com/")(req)) must_== OK
+        status(target("http://www.google.com/")(fakeRequest(Json.obj("sections" -> Seq[JsObject]())))) must_== OK
       }
 
       "doesn't accept incorrect format json" in {
-        val req = new FakeRequest(POST, controllers.routes.Application.postNote("").url,
-          FakeHeaders(), Json.obj("bad" -> "json"))
-        status(target("http://www.google.com/")(req)) must_== BAD_REQUEST
+        status(target("http://www.google.com/")(fakeRequest(Json.obj("bad" -> "json")))) must_== BAD_REQUEST
       }
     }
   }
