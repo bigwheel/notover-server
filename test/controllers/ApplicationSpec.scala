@@ -7,7 +7,7 @@ import org.junit.runner._
 import play.api.test._
 import play.api.test.Helpers._
 import play.api.mvc._
-import play.api.libs.json.{ Json, JsValue }
+import play.api.libs.json.Json
 
 @RunWith(classOf[JUnitRunner])
 class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
