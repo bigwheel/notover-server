@@ -44,11 +44,11 @@ class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
           OK ! "http://www.google.com/" |
           OK ! "https://www.google.com/" |
           BAD_REQUEST ! "ftp://www.google.com/" |
-          BAD_REQUEST ! "file://www.google.com/" |> { (status_code, sample_url) =>
+          BAD_REQUEST ! "file://www.google.com/" |> { (statusCode, sampleUrl) =>
           val req = new FakeRequest(POST, controllers.routes.Application.postNote("").url,
             FakeHeaders(), Json.obj())
           // ↑ なぜか URL 取得するのにダミーの引数渡さないといけないださい仕様だが play ゆえ致し方なし
-          status(target(sample_url)(req)) must_== status_code
+          status(target(sampleUrl)(req)) must_== statusCode
         }
       }
     }
