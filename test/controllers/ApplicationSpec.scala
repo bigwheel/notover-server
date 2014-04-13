@@ -14,11 +14,12 @@ class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
 
   "Application" should {
 
-    "postNote" >> {
-      val controller = new ApplicationController with Controller with MongoTraitForTest {
-        protected[this] val executionContext = scala.concurrent.ExecutionContext.global
-      }
-      val target = controller.postNote _
+    val controller = new ApplicationController with Controller with MongoTraitForTest {
+      protected[this] val executionContext = scala.concurrent.ExecutionContext.global
+    }
+
+    "getNote" >> {
+      val target = controller.getNote _
 
       "accepts only http and https protocols" in {
         // ↓ クソイケてない specs2 の data table のせいで data table の１列目に文字列を持ってくることができない。
@@ -30,12 +31,26 @@ class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
           OK ! "https://www.google.com/" |
           BAD_REQUEST ! "ftp://www.google.com/" |
           BAD_REQUEST ! "file://www.google.com/" |> { (status_code, sample_url) =>
-            val req: FakeRequest[JsValue] = new FakeRequest(POST,
-              controllers.routes.Application.postNote("").url, FakeHeaders(),
-              Json.obj() // ↑ なぜか URL 取得するのにダミーの引数渡さないといけないださい仕様だが play ゆえ致し方なし
-            )
-            status(target(sample_url)(req)) === status_code
-          }
+          status(target(sample_url)(FakeRequest())) must_== status_code
+        }
+      }
+    }
+
+    "postNote" >> {
+      val target = controller.postNote _
+
+      "accepts only http and https protocols" in {
+        "status code" | "sample url" |
+          OK ! "http://www.google.com/" |
+          OK ! "https://www.google.com/" |
+          BAD_REQUEST ! "ftp://www.google.com/" |
+          BAD_REQUEST ! "file://www.google.com/" |> { (status_code, sample_url) =>
+          val req: FakeRequest[JsValue] = new FakeRequest(POST,
+            controllers.routes.Application.postNote("").url, FakeHeaders(),
+            Json.obj() // ↑ なぜか URL 取得するのにダミーの引数渡さないといけないださい仕様だが play ゆえ致し方なし
+          )
+          status(target(sample_url)(req)) === status_code
+        }
       }
     }
   }

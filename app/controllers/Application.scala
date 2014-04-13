@@ -26,16 +26,24 @@ trait ApplicationController extends YetAnotherMongoTrait {
     }
   }
 
-  def getNote(url: String) = Action.async {
-    val futureNotesList =
-      notesCollection.find(Json.obj("url" -> url)).cursor[JsObject].collect[List]()
+  private[this] def urlValidation(url: String)(successSequence: => Future[SimpleResult]) =
+    if (new UrlValidator(Array("http", "https")).isValid(url))
+      successSequence
+    else
+      Future.successful(BadRequest)
 
-    val futureJson = futureNotesList.map(noteList => JsArray(noteList))
-    futureJson.map(Ok(_))
+  def getNote(url: String) = Action.async {
+    urlValidation(url) {
+      val futureNotesList =
+        notesCollection.find(Json.obj("url" -> url)).cursor[JsObject].collect[List]()
+
+      val futureJson = futureNotesList.map(noteList => JsArray(noteList))
+      futureJson.map(Ok(_))
+    }
   }
 
   def postNote(url: String) = Action.async(parse.json) { request =>
-    if (new UrlValidator(Array("http", "https")).isValid(url)) {
+    urlValidation(url) {
       val futureLastError: Future[LastError] = notesCollection.save(request.body.as[JsObject] ++ Json.obj("url" -> url))
 
       futureLastError.map {
@@ -45,8 +53,7 @@ trait ApplicationController extends YetAnotherMongoTrait {
           else
             BadRequest
       }
-    } else
-      Future.successful(BadRequest)
+    }
   }
 }
 
