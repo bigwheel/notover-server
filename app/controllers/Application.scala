@@ -1,7 +1,7 @@
 package controllers
 
 import play.api.mvc._
-import play.api.libs.json.{ JsArray, JsObject, Json }
+import play.api.libs.json._
 import play.modules.reactivemongo.MongoController
 import play.modules.reactivemongo.json.collection.JSONCollection
 import reactivemongo.api.indexes.{ IndexType, Index }
@@ -9,6 +9,12 @@ import scala.concurrent.Future
 import reactivemongo.core.commands.LastError
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import org.apache.commons.validator.routines.UrlValidator
+import models.Note
+import play.api.libs.json.JsArray
+import reactivemongo.api.indexes.Index
+import play.modules.reactivemongo.json.collection.JSONCollection
+import play.api.libs.json.JsObject
+import play.api.mvc.SimpleResult
 
 trait ApplicationController extends YetAnotherMongoTrait {
   self: Controller =>
@@ -44,14 +50,19 @@ trait ApplicationController extends YetAnotherMongoTrait {
 
   def postNote(url: String) = Action.async(parse.json) { request =>
     urlValidation(url) {
-      val futureLastError: Future[LastError] =
-        notesCollection.save(request.body.as[JsObject] ++ Json.obj("url" -> url))
+      request.body.validate[Note] match {
+        case _: JsSuccess[Note] =>
+          val futureLastError: Future[LastError] =
+            notesCollection.save(request.body.as[JsObject] ++ Json.obj("url" -> url))
 
-      futureLastError.map { lastError =>
-        if (lastError.ok)
-          Ok
-        else
-          InternalServerError
+          futureLastError.map {
+            lastError =>
+              if (lastError.ok)
+                Ok
+              else
+                InternalServerError
+          }
+        case _: JsError => Future.successful(BadRequest)
       }
     }
   }

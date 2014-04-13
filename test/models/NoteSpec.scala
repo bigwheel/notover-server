@@ -18,9 +18,7 @@ class NoteSpec extends Specification {
         )
       )
       sampleJson.validate[Note] must beLike {
-        case JsSuccess(Note(sections), _) if
-        sections == Set(Section("c", "d"), Section("a", "b"))
-        => ok
+        case JsSuccess(Note(sections), _) if sections == Set(Section("c", "d"), Section("a", "b")) => ok
       }
     }
 

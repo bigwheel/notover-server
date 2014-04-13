@@ -7,7 +7,7 @@ import org.junit.runner._
 import play.api.test._
 import play.api.test.Helpers._
 import play.api.mvc._
-import play.api.libs.json.Json
+import play.api.libs.json.{ JsObject, Json }
 
 @RunWith(classOf[JUnitRunner])
 class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
@@ -46,7 +46,7 @@ class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
           BAD_REQUEST ! "ftp://www.google.com/" |
           BAD_REQUEST ! "file://www.google.com/" |> { (statusCode, sampleUrl) =>
             val req = new FakeRequest(POST, controllers.routes.Application.postNote("").url,
-              FakeHeaders(), Json.obj())
+              FakeHeaders(), Json.obj("sections" -> Seq[JsObject]()))
             // ↑ なぜか URL 取得するのにダミーの引数渡さないといけないださい仕様だが play ゆえ致し方なし
             status(target(sampleUrl)(req)) must_== statusCode
           }
@@ -54,7 +54,7 @@ class ApplicationSpec extends Specification with org.specs2.matcher.DataTables {
 
       "accepts empty json" in {
         val req = new FakeRequest(POST, controllers.routes.Application.postNote("").url,
-          FakeHeaders(), Json.obj())
+          FakeHeaders(), Json.obj("sections" -> Seq[JsObject]()))
         status(target("http://www.google.com/")(req)) must_== OK
       }
 
