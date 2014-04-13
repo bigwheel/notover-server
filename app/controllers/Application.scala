@@ -17,7 +17,7 @@ trait ApplicationController extends YetAnotherMongoTrait {
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def notesCollection = db.collection[JSONCollection]("notes")
+  private[this] def notesCollection = db.collection[JSONCollection]("notes")
 
   def createMongodbIndex = Action.async {
     notesCollection.indexesManager.ensure(Index(List("url" -> IndexType.Ascending))).map {
